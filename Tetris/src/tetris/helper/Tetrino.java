@@ -1,7 +1,5 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Helper data class for gengerating the tetrino's.
  */
 
 package tetris.helper;
@@ -9,33 +7,41 @@ package tetris.helper;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
+/*
+ * @author Neville Bulmer
+*/
+
 public class Tetrino 
 {
-    public Rectangle a;
-    public Rectangle b;
-    public Rectangle c;
-    public Rectangle d;
+    // Rectangle which is used to represent the first block of a tetrino.
+    public Rectangle tetrinoPeiceOne;
+    // Rectangle which is used to represent the second block of a tetrino.
+    public Rectangle tetrinoPeiceTwo;
+    // Rectangle which is used to represent the third block of a tetrino.
+    public Rectangle tetrinoPeiceThree;
+    // Rectangle which is used to represent the fourth block of a tetrino.
+    public Rectangle tetrinoPeiceFour;
     Color color;
-    private String name;
+    private String tetrinoName;
     public int tetrino = 1;
 
-    public Tetrino(Rectangle a, Rectangle b, Rectangle c, Rectangle d) 
+    public Tetrino(Rectangle tetrinoPeiceOne, Rectangle tetrinoPeiceTwo, Rectangle tetrinoPeiceThree, Rectangle tetrinoPeiceFour) 
     {
-        this.a = a;
-        this.b = b;
-        this.c = c;
-        this.d = d;
+        this.tetrinoPeiceOne = tetrinoPeiceOne;
+        this.tetrinoPeiceTwo = tetrinoPeiceTwo;
+        this.tetrinoPeiceThree = tetrinoPeiceThree;
+        this.tetrinoPeiceFour = tetrinoPeiceFour;
     }
 
-    public Tetrino(Rectangle a, Rectangle b, Rectangle c, Rectangle d, String name) 
+    public Tetrino(Rectangle tetrinoPeiceOne, Rectangle tetrinoPeiceTwo, Rectangle tetrinoPeiceThree, Rectangle tetrinoPeiceFour, String tetrinoName) 
     {
-        this.a = a;
-        this.b = b;
-        this.c = c;
-        this.d = d;
-        this.name = name;
+        this.tetrinoPeiceOne = tetrinoPeiceOne;
+        this.tetrinoPeiceTwo = tetrinoPeiceTwo;
+        this.tetrinoPeiceThree = tetrinoPeiceThree;
+        this.tetrinoPeiceFour = tetrinoPeiceFour;
+        this.tetrinoName = tetrinoName;
 
-        switch (name) 
+        switch (tetrinoName) 
         {
         case "j":
                 color = Color.SLATEGRAY;
@@ -61,16 +67,19 @@ public class Tetrino
 
         }
         
-        this.a.setFill(color);
-        this.b.setFill(color);
-        this.c.setFill(color);
-        this.d.setFill(color);
+        /*
+         * Fills the tetrino peices with color.
+        */
+        this.tetrinoPeiceOne.setFill(color);
+        this.tetrinoPeiceTwo.setFill(color);
+        this.tetrinoPeiceThree.setFill(color);
+        this.tetrinoPeiceFour.setFill(color);
     }
 
 
     public String getName() 
     {
-        return name;
+        return tetrinoName;
     }
 
 

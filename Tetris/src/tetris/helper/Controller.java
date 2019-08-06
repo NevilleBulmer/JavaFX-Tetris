@@ -7,38 +7,39 @@
 package tetris.helper;
 
 import javafx.scene.shape.Rectangle;
-import tetris.Tetris;
+import tetris.view.GameViewManager;
+
 
 public class Controller 
 {
     // Getting the numbers and the GAME_GRID_VIEW from Tetris
-    public static final int MOVE = Tetris.PLAYER_MOVE;
-    public static final int PLAYER_MOVE_SIZE = Tetris.PLAYER_MOVE_SIZE;
-    public static int MAX_WIDTH = Tetris.MAX_WIDTH;
-    public static int MAX_HEIGHT = Tetris.MAX_HEIGHT;
-    public static int[][] GAME_GRID_VIEW = Tetris.GAME_GRID_VIEW;
+    public static final int MOVE = GameViewManager.PLAYER_MOVE;
+    public static final int PLAYER_MOVE_SIZE = GameViewManager.PLAYER_MOVE_SIZE;
+    public static int MAX_WIDTH = GameViewManager.MAX_WIDTH;
+    public static int MAX_HEIGHT = GameViewManager.MAX_HEIGHT;
+    public static int[][] GAME_GRID_VIEW = GameViewManager.GAME_GRID_VIEW;
 
     public static void MoveRight(Tetrino tetrino) 
     {
         if (
-            tetrino.a.getX() + MOVE <= MAX_WIDTH - PLAYER_MOVE_SIZE && 
-            tetrino.b.getX() + MOVE <= MAX_WIDTH - PLAYER_MOVE_SIZE && 
-            tetrino.c.getX() + MOVE <= MAX_WIDTH - PLAYER_MOVE_SIZE && 
-            tetrino.d.getX() + MOVE <= MAX_WIDTH - PLAYER_MOVE_SIZE
+            tetrino.tetrinoPeiceOne.getX() + MOVE <= MAX_WIDTH - PLAYER_MOVE_SIZE && 
+            tetrino.tetrinoPeiceTwo.getX() + MOVE <= MAX_WIDTH - PLAYER_MOVE_SIZE && 
+            tetrino.tetrinoPeiceThree.getX() + MOVE <= MAX_WIDTH - PLAYER_MOVE_SIZE && 
+            tetrino.tetrinoPeiceFour.getX() + MOVE <= MAX_WIDTH - PLAYER_MOVE_SIZE
            ) 
         {
 
-            int movea = GAME_GRID_VIEW[((int) tetrino.a.getX() / PLAYER_MOVE_SIZE) + 1][((int) tetrino.a.getY() / PLAYER_MOVE_SIZE)];
-            int moveb = GAME_GRID_VIEW[((int) tetrino.b.getX() / PLAYER_MOVE_SIZE) + 1][((int) tetrino.b.getY() / PLAYER_MOVE_SIZE)];
-            int movec = GAME_GRID_VIEW[((int) tetrino.c.getX() / PLAYER_MOVE_SIZE) + 1][((int) tetrino.c.getY() / PLAYER_MOVE_SIZE)];
-            int moved = GAME_GRID_VIEW[((int) tetrino.d.getX() / PLAYER_MOVE_SIZE) + 1][((int) tetrino.d.getY() / PLAYER_MOVE_SIZE)];
+            int movea = GAME_GRID_VIEW[((int) tetrino.tetrinoPeiceOne.getX() / PLAYER_MOVE_SIZE) + 1][((int) tetrino.tetrinoPeiceOne.getY() / PLAYER_MOVE_SIZE)];
+            int moveb = GAME_GRID_VIEW[((int) tetrino.tetrinoPeiceTwo.getX() / PLAYER_MOVE_SIZE) + 1][((int) tetrino.tetrinoPeiceTwo.getY() / PLAYER_MOVE_SIZE)];
+            int movec = GAME_GRID_VIEW[((int) tetrino.tetrinoPeiceThree.getX() / PLAYER_MOVE_SIZE) + 1][((int) tetrino.tetrinoPeiceThree.getY() / PLAYER_MOVE_SIZE)];
+            int moved = GAME_GRID_VIEW[((int) tetrino.tetrinoPeiceFour.getX() / PLAYER_MOVE_SIZE) + 1][((int) tetrino.tetrinoPeiceFour.getY() / PLAYER_MOVE_SIZE)];
 
             if (movea == 0 && movea == moveb && moveb == movec && movec == moved) 
             {
-                tetrino.a.setX(tetrino.a.getX() + MOVE);
-                tetrino.b.setX(tetrino.b.getX() + MOVE);
-                tetrino.c.setX(tetrino.c.getX() + MOVE);
-                tetrino.d.setX(tetrino.d.getX() + MOVE);
+                tetrino.tetrinoPeiceOne.setX(tetrino.tetrinoPeiceOne.getX() + MOVE);
+                tetrino.tetrinoPeiceTwo.setX(tetrino.tetrinoPeiceTwo.getX() + MOVE);
+                tetrino.tetrinoPeiceThree.setX(tetrino.tetrinoPeiceThree.getX() + MOVE);
+                tetrino.tetrinoPeiceFour.setX(tetrino.tetrinoPeiceFour.getX() + MOVE);
             }
         }
     }
@@ -46,29 +47,29 @@ public class Controller
     public static void MoveLeft(Tetrino tetrino) 
     {
         if (
-            tetrino.a.getX() - MOVE >= 0 && 
-            tetrino.b.getX() - MOVE >= 0 && 
-            tetrino.c.getX() - MOVE >= 0 && 
-            tetrino.d.getX() - MOVE >= 0
+            tetrino.tetrinoPeiceOne.getX() - MOVE >= 0 && 
+            tetrino.tetrinoPeiceTwo.getX() - MOVE >= 0 && 
+            tetrino.tetrinoPeiceThree.getX() - MOVE >= 0 && 
+            tetrino.tetrinoPeiceFour.getX() - MOVE >= 0
            )
         {
 
-            int movea = GAME_GRID_VIEW[((int) tetrino.a.getX() / PLAYER_MOVE_SIZE) - 1][((int) tetrino.a.getY() / PLAYER_MOVE_SIZE)];
-            int moveb = GAME_GRID_VIEW[((int) tetrino.b.getX() / PLAYER_MOVE_SIZE) - 1][((int) tetrino.b.getY() / PLAYER_MOVE_SIZE)];
-            int movec = GAME_GRID_VIEW[((int) tetrino.c.getX() / PLAYER_MOVE_SIZE) - 1][((int) tetrino.c.getY() / PLAYER_MOVE_SIZE)];
-            int moved = GAME_GRID_VIEW[((int) tetrino.d.getX() / PLAYER_MOVE_SIZE) - 1][((int) tetrino.d.getY() / PLAYER_MOVE_SIZE)];
+            int movea = GAME_GRID_VIEW[((int) tetrino.tetrinoPeiceOne.getX() / PLAYER_MOVE_SIZE) - 1][((int) tetrino.tetrinoPeiceOne.getY() / PLAYER_MOVE_SIZE)];
+            int moveb = GAME_GRID_VIEW[((int) tetrino.tetrinoPeiceTwo.getX() / PLAYER_MOVE_SIZE) - 1][((int) tetrino.tetrinoPeiceTwo.getY() / PLAYER_MOVE_SIZE)];
+            int movec = GAME_GRID_VIEW[((int) tetrino.tetrinoPeiceThree.getX() / PLAYER_MOVE_SIZE) - 1][((int) tetrino.tetrinoPeiceThree.getY() / PLAYER_MOVE_SIZE)];
+            int moved = GAME_GRID_VIEW[((int) tetrino.tetrinoPeiceFour.getX() / PLAYER_MOVE_SIZE) - 1][((int) tetrino.tetrinoPeiceFour.getY() / PLAYER_MOVE_SIZE)];
 
             if (movea == 0 && movea == moveb && moveb == movec && movec == moved) 
             {
-                tetrino.a.setX(tetrino.a.getX() - MOVE);
-                tetrino.b.setX(tetrino.b.getX() - MOVE);
-                tetrino.c.setX(tetrino.c.getX() - MOVE);
-                tetrino.d.setX(tetrino.d.getX() - MOVE);
+                tetrino.tetrinoPeiceOne.setX(tetrino.tetrinoPeiceOne.getX() - MOVE);
+                tetrino.tetrinoPeiceTwo.setX(tetrino.tetrinoPeiceTwo.getX() - MOVE);
+                tetrino.tetrinoPeiceThree.setX(tetrino.tetrinoPeiceThree.getX() - MOVE);
+                tetrino.tetrinoPeiceFour.setX(tetrino.tetrinoPeiceFour.getX() - MOVE);
             }
         }
     }
 
-    public static Tetrino makeRect() 
+    public static Tetrino makeTetrino()
     {
         int block = (int) (Math.random() * 100);
 
