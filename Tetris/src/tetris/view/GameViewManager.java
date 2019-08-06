@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Timer;
 import java.util.TimerTask;
+import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.event.EventHandler;
@@ -23,6 +24,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import tetris.helper.Controller;
+import tetris.helper.CustomAnimationTimer;
 import tetris.helper.Tetrino;
 
 public class GameViewManager extends Application 
@@ -48,6 +50,9 @@ public class GameViewManager extends Application
     // Creates a satge to be passed to the meny class.
     static Stage classStage = new Stage();
 
+    // AnimationTimer to track the animation progress.
+    private AnimationTimer gameAnimationTimer;
+    private long lastUpdate = 300 ;
     @Override
     public void start(Stage stage) throws Exception 
     {
@@ -80,55 +85,51 @@ public class GameViewManager extends Application
         classStage.setScene(scene);
         classStage.setTitle("Tetris");
         classStage.show();
-
-        Timer fall = new Timer();
-        TimerTask task = new TimerTask() 
+        
+        CustomAnimationTimer timer = new CustomAnimationTimer(500) 
         {
-            public void run() 
+            @Override
+            public void handle() 
             {
-                Platform.runLater(new Runnable() 
+                if 
+                (
+                    object.tetrinoPeiceOne.getY() == 0 || 
+                    object.tetrinoPeiceTwo.getY() == 0 || 
+                    object.tetrinoPeiceThree.getY() == 0 || 
+                    object.tetrinoPeiceFour.getY() == 0
+                )
+                    top++;
+                else
+                    top = 0;
+
+                if (top == 2) 
                 {
-                    public void run() 
-                    {
-                        if 
-                        (
-                            object.tetrinoPeiceOne.getY() == 0 || 
-                            object.tetrinoPeiceTwo.getY() == 0 || 
-                            object.tetrinoPeiceThree.getY() == 0 || 
-                            object.tetrinoPeiceFour.getY() == 0
-                        )
-                            top++;
-                        else
-                            top = 0;
+                    // GAME OVER
+                    Text over = new Text("GAME OVER");
+                    over.setFill(Color.RED);
+                    over.setStyle("-fx-font: 70 arial;");
+                    over.setY(250);
+                    over.setX(10);
+                    group.getChildren().add(over);
+                    game = false;
+                }
+                // Exit
+                if (top == 15) 
+                {
+                    System.exit(0);
+                }
 
-                        if (top == 2) 
-                        {
-                            // GAME OVER
-                            Text over = new Text("GAME OVER");
-                            over.setFill(Color.RED);
-                            over.setStyle("-fx-font: 70 arial;");
-                            over.setY(250);
-                            over.setX(10);
-                            group.getChildren().add(over);
-                            game = false;
-                        }
-                        // Exit
-                        if (top == 15) 
-                        {
-                            System.exit(0);
-                        }
-
-                        if (game) 
-                        {
-                            MoveDown(object);
-                            scoretext.setText("Score: " + Integer.toString(score));
-                            level.setText("Lines: " + Integer.toString(linesNo));
-                        }
-                    }
-                });
+                if (game) 
+                {
+                    MoveDown(object);
+                    scoretext.setText("Score: " + Integer.toString(score));
+                    level.setText("Lines: " + Integer.toString(linesNo));
+                }
             }
         };
-        fall.schedule(task, 0, 300);
+
+        timer.start();
+       
     }
 
     // Responsible for detecting key presses.
