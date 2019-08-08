@@ -16,4 +16,8 @@ Created a custom animation timer class to replace the older method of using a ti
 The custom animation class allow us to use the AnimationTimer built in to JavaFX in hand with cotrollable time in milliseconds.
 
 # Update Three
-Coming soon
+Updated the game menu to show more options, updated the game architecture to allow more in-game flexibility, a lot of quality of life fixes and updates.
+
+Implemented up next feature, this feature shows the peice which will be generated next.
+
+Improved the code from feature update two.
