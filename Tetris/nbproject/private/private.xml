@@ -4,7 +4,10 @@
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
             <file>file:/C:/Users/bulme/Documents/NetBeansProjects/Tetris/src/tetris/view/GameViewManager.java</file>
+            <file>file:/C:/Users/bulme/Documents/NetBeansProjects/Tetris/src/tetris/Tetris.java</file>
             <file>file:/C:/Users/bulme/Documents/NetBeansProjects/Tetris/src/tetris/view/MenuViewManager.java</file>
+            <file>file:/C:/Users/bulme/Documents/NetBeansProjects/Tetris/src/tetris/helper/Tetrino.java</file>
+            <file>file:/C:/Users/bulme/Documents/NetBeansProjects/Tetris/src/tetris/helper/MediumLabelInformation.java</file>
         </group>
     </open-files>
 </project-private>

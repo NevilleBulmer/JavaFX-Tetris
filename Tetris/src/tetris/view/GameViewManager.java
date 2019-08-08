@@ -8,14 +8,12 @@ package tetris.view;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Timer;
-import java.util.TimerTask;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
-import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
@@ -25,6 +23,7 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import tetris.helper.Controller;
 import tetris.helper.CustomAnimationTimer;
+import tetris.helper.MediumLabelInformation;
 import tetris.helper.Tetrino;
 
 public class GameViewManager extends Application 
@@ -38,13 +37,21 @@ public class GameViewManager extends Application
     // Sets the max height equal to the player move size multiply 24.
     public static final int MAX_HEIGHT = PLAYER_MOVE_SIZE * 24;
     public static int[][] GAME_GRID_VIEW = new int[MAX_WIDTH / PLAYER_MOVE_SIZE][MAX_HEIGHT / PLAYER_MOVE_SIZE];
+    // Mane pane for the game view.
     private static final Pane group = new Pane();
+    // Tetrino ojbect.
     private static Tetrino object;
+    // Scene with maine Pane added and height and width set.
     private static final Scene scene = new Scene(group, MAX_WIDTH + 150, MAX_HEIGHT);
+    // PLayers score.
     public static int score = 0;
+    // Int defining the top of the game board.
     private static int top = 0;
+    // Boolean used to check if the game is running or not.
     private static boolean game = true;
+    // Creates a variable which is set equal to the makeTetrino method from controller.
     private static Tetrino nextTetrino = Controller.makeTetrino();
+    // Lines, used to trck the player lines created.
     private static int linesNo = 0;
     
     // Creates a satge to be passed to the meny class.
@@ -52,7 +59,14 @@ public class GameViewManager extends Application
 
     // AnimationTimer to track the animation progress.
     private AnimationTimer gameAnimationTimer;
-    private long lastUpdate = 300 ;
+    
+    String nextPeiceToDisplay;
+    
+    // Used to speed up/slow down the game.
+    long currentSpeedOfGame;
+    
+    ImageView nextPlayPeice, nextPlayPeiceHolder;
+    
     @Override
     public void start(Stage stage) throws Exception 
     {
@@ -63,34 +77,53 @@ public class GameViewManager extends Application
             Arrays.fill(a, 0);
         }
         
+        // Instantiates a classStage equal to Stage, used to show and hide.
         classStage = stage;
 
-        Line line = new Line(MAX_WIDTH, 0, MAX_WIDTH, MAX_HEIGHT);
-        Text scoretext = new Text("Score: ");
-        scoretext.setStyle("-fx-font: 20 arial;");
-        scoretext.setY(50);
-        scoretext.setX(MAX_WIDTH + 5);
-        Text level = new Text("Lines: ");
-        level.setStyle("-fx-font: 20 arial;");
-        level.setY(100);
-        level.setX(MAX_WIDTH + 5);
-        level.setFill(Color.GREEN);
-        group.getChildren().addAll(scoretext, line, level);
+        // Instantiates a vertical line to seperate the game view.
+        Line viewSeperatorLine = new Line(MAX_WIDTH, 0, MAX_WIDTH, MAX_HEIGHT);
+        // Adds a label for information purpouses to the game I.e. Score.
+        MediumLabelInformation currentPlayerScore = new MediumLabelInformation("Score: ", 50, MAX_WIDTH + 410);
+        
+        // Adds a label for information purpouses to the game I.e. Lines.
+        MediumLabelInformation currentPlayerLinesCount = new MediumLabelInformation("Lines: ", 100, MAX_WIDTH + 405);
+        
+        // Adds a label for information purpouses to the game I.e. Up Next.
+        MediumLabelInformation upNext = new MediumLabelInformation("Up Next", 200, MAX_WIDTH + 445);
+        
+        // Adds viewSeperatorLine, currentPlayerScore, currentPlayerLinesCount, upNext to the Pane.
+        group.getChildren().addAll(viewSeperatorLine, currentPlayerScore, currentPlayerLinesCount, upNext);
 
+        // a is equal to nextTetrino.
         Tetrino a = nextTetrino;
+        // Adds all tetrino peices to the the Pane.
         group.getChildren().addAll(a.tetrinoPeiceOne, a.tetrinoPeiceTwo, a.tetrinoPeiceThree, a.tetrinoPeiceFour);
         moveOnKeyPress(a);
+        // Instainaties an object.
         object = a;
+        // nextTetrino is equal to the make tetrino method from the controller.
         nextTetrino = Controller.makeTetrino();
+        // Adds the scene to the stage.
         classStage.setScene(scene);
+        // Sets the title for the stage.
         classStage.setTitle("Tetris");
+        // Shows the stage.
         classStage.show();
         
-        CustomAnimationTimer timer = new CustomAnimationTimer(500) 
+        // Instantiates a new ImageView to hold the next 
+        // player peice to be generated and displayed to the player.
+        nextPlayPeice = new ImageView();
+        
+        // The current speed of the game.
+        currentSpeedOfGame = 500;
+        
+        // Instantiates and adds the custom CustomAnimationTimer and sets its delay timer.
+        CustomAnimationTimer timer = new CustomAnimationTimer(currentSpeedOfGame) 
         {
             @Override
             public void handle() 
             {
+                // If statement checking if the Y values/positions of the tetrino peices equal zero.
                 if 
                 (
                     object.tetrinoPeiceOne.getY() == 0 || 
@@ -98,36 +131,157 @@ public class GameViewManager extends Application
                     object.tetrinoPeiceThree.getY() == 0 || 
                     object.tetrinoPeiceFour.getY() == 0
                 )
+                {
+                    // Increments top by one.
                     top++;
-                else
+                } else {
+                    // Else set top to zero
                     top = 0;
+                }
 
+                // is top equals 2 then game over.
                 if (top == 2) 
                 {
-                    // GAME OVER
-                    Text over = new Text("GAME OVER");
-                    over.setFill(Color.RED);
-                    over.setStyle("-fx-font: 70 arial;");
-                    over.setY(250);
-                    over.setX(10);
-                    group.getChildren().add(over);
+                    // Instantiate text gameOver and set its text to GAME OVER.
+                    Text gameOver = new Text("GAME OVER");
+                    // Sets the fill color of gameOver.
+                    gameOver.setFill(Color.RED);
+                    // Sets the styke of gameOver.
+                    gameOver.setStyle("-fx-font: 70 arial;");
+                    // Sets the Y value/position of gameOver.
+                    gameOver.setY(250);
+                    // Sets the X value/position of gameOver.
+                    gameOver.setX(10);
+                    // Adds gameOver to the Pane.
+                    group.getChildren().add(gameOver);
+                    // Sets game to false, I.e. game over.
                     game = false;
                 }
-                // Exit
+                
+                // If top equals 15 then exit system.
                 if (top == 15) 
                 {
+                    // Exits the system.
                     System.exit(0);
                 }
 
+                // If game I.e. is the game is running and game over has not occured.
                 if (game) 
                 {
+                    // Instantiate the move down method.
                     MoveDown(object);
-                    scoretext.setText("Score: " + Integer.toString(score));
-                    level.setText("Lines: " + Integer.toString(linesNo));
+                    // Sets the text of scoreText to Score: plus the value of the current score.
+                    currentPlayerScore.setText("Score: " + Integer.toString(score));
+                    // Sets the text of currentPlayerLevel to Score: plus the value of the current lines count.
+                    currentPlayerLinesCount.setText("Lines: " + Integer.toString(linesNo));
                 }
+                
+                // Decreases the current game speed by one every second.
+                currentSpeedOfGame--;
+                
+                // Switch, used for checking tetrino names and assigning (Up next) images
+                switch(nextTetrino.getName())
+                {
+                    // Case for tetrinoT.
+                    case "t":
+                        // Sets the ImageView to null, I.e. stops over lapping images.
+                        nextPlayPeice.setImage(null);
+                        // Sets the string nextPeiceToDislpay equal to the file path of the corresponding image.
+                        nextPeiceToDisplay = "tetris/view/assets/tetrino_complete_assets/tetrinoT.png";
+                        // Instantiates nextPlayerPeice and passes in the file path from above.
+                        nextPlayPeice = new ImageView(nextPeiceToDisplay);
+                    
+                        break;
+                    
+                    // Case for tetrinoS.
+                    case "s":
+                        // Sets the ImageView to null, I.e. stops over lapping images.
+                        nextPlayPeice.setImage(null);
+                        // Sets the string nextPeiceToDislpay equal to the file path of the corresponding image.
+                        nextPeiceToDisplay = "tetris/view/assets/tetrino_complete_assets/tetrinoS.png";
+                        // Instantiates nextPlayerPeice and passes in the file path from above.
+                        nextPlayPeice = new ImageView(nextPeiceToDisplay);
+                    
+                        break;
+                        
+                    // Case for tetrinoZ.
+                    case "z":
+                        // Sets the ImageView to null, I.e. stops over lapping images.
+                        nextPlayPeice.setImage(null);
+                        // Sets the string nextPeiceToDislpay equal to the file path of the corresponding image.
+                        nextPeiceToDisplay = "tetris/view/assets/tetrino_complete_assets/tetrinoZ.png";
+                        // Instantiates nextPlayerPeice and passes in the file path from above.
+                        nextPlayPeice = new ImageView(nextPeiceToDisplay);
+                    
+                        break;
+                        
+                    // Case for tetrinoL.
+                    case "l":
+                        // Sets the ImageView to null, I.e. stops over lapping images.
+                        nextPlayPeice.setImage(null);
+                        // Sets the string nextPeiceToDislpay equal to the file path of the corresponding image.
+                        nextPeiceToDisplay = "tetris/view/assets/tetrino_complete_assets/tetrinoL.png";
+                        // Instantiates nextPlayerPeice and passes in the file path from above.
+                        nextPlayPeice = new ImageView(nextPeiceToDisplay);
+                    
+                        break;
+                        
+                    // Case for tetrinoJ.    
+                    case "j":
+                        // Sets the ImageView to null, I.e. stops over lapping images.
+                        nextPlayPeice.setImage(null);
+                        // Sets the string nextPeiceToDislpay equal to the file path of the corresponding image.
+                        nextPeiceToDisplay = "tetris/view/assets/tetrino_complete_assets/tetrinoJ.png";
+                        // Instantiates nextPlayerPeice and passes in the file path from above.
+                        nextPlayPeice = new ImageView(nextPeiceToDisplay);
+                    
+                        break;
+                        
+                    // Case for tetrinoI.
+                    case "i":
+                        // Sets the ImageView to null, I.e. stops over lapping images.
+                        nextPlayPeice.setImage(null);
+                        // Sets the string nextPeiceToDislpay equal to the file path of the corresponding image.
+                        nextPeiceToDisplay = "tetris/view/assets/tetrino_complete_assets/tetrinoI.png";
+                        // Instantiates nextPlayerPeice and passes in the file path from above.
+                        nextPlayPeice = new ImageView(nextPeiceToDisplay);
+                    
+                        break;
+                        
+                    // Case for tetrinoO.
+                    case "o":
+                        // Sets the ImageView to null, I.e. stops over lapping images.
+                        nextPlayPeice.setImage(null);
+                        // Sets the string nextPeiceToDislpay equal to the file path of the corresponding image.
+                        nextPeiceToDisplay = "tetris/view/assets/tetrino_complete_assets/tetrinoO.png";
+                        // Instantiates nextPlayerPeice and passes in the file path from above.
+                        nextPlayPeice = new ImageView(nextPeiceToDisplay);
+                    
+                        break;
+                }
+                
+                nextPlayPeiceHolder = new ImageView("tetris/helper/assets/grey_panel.png");
+                // Sets the Y value/position of nextPlayerPeice.
+                nextPlayPeiceHolder.setY(260);
+                // Sets the X value/position of nextPlayerPeice using the max_width + 10.
+                nextPlayPeiceHolder.setX(MAX_WIDTH + 25);
+                
+                nextPlayPeiceHolder.setScaleY(nextPlayPeice.getScaleY());
+                
+                // Adds the nextPlayerPeice to the Pane.
+                group.getChildren().add(nextPlayPeiceHolder);
+                
+                
+                // Sets the Y value/position of nextPlayerPeice.
+                nextPlayPeice.setY(270);
+                // Sets the X value/position of nextPlayerPeice using the max_width + 10.
+                nextPlayPeice.setX(MAX_WIDTH + 50);
+                // Adds the nextPlayerPeice to the Pane.
+                group.getChildren().add(nextPlayPeice);
             }
         };
 
+        // Starts the timer.
         timer.start();
        
     }
@@ -617,6 +771,7 @@ public class GameViewManager extends Application
             }
     }
 
+    // Method responsible for removing rows when a user completes a line.
     private void RemoveRows(Pane pane) 
     {
         // Array of nodes.

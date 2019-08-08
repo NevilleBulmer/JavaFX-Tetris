@@ -221,7 +221,7 @@ public class MenuViewManager
     private void createBackground()
     {
         // Creates an image and sets it to the background image, along with its height and width.
-        Image backgroundImage = new Image(MENU_BOARD_BACKGROUND_IMAGE, 610, 810, false, true);
+        Image backgroundImage = new Image(MENU_BOARD_BACKGROUND_IMAGE, MENU_WINDOW_WIDTH + 10, MENU_WINDOW_HEIGHT + 10, false, true);
         // Creates a new background image and set the image above to the image to be used along with the repeats, size.
         BackgroundImage background = new BackgroundImage(backgroundImage, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, null);
         

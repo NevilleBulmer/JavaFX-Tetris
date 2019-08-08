@@ -1,0 +1,1 @@
+Fix the completed tetris images so the image color mages the tetrino in game.
