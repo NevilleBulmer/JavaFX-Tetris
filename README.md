@@ -15,6 +15,43 @@ Created a custom animation timer class to replace the older method of using a ti
 
 The custom animation class allow us to use the AnimationTimer built in to JavaFX in hand with cotrollable time in milliseconds.
 
+```
+public abstract class CustomAnimationTimer extends AnimationTimer
+{
+    // Duration to sleep in nano seconds.
+    private long sleepNs = 0;
+    // Previouse time.
+    long prevTime = 0;
+
+    // Constructor, which take the sleep in annos seconds as a variable.
+    public CustomAnimationTimer(long sleepMs)
+    {
+        // Instantiates the sleep in nano seconds to 1 seconds.
+        this.sleepNs = sleepMs * 1_000_000;
+    }
+
+    // Handle mehod.
+    @Override
+    public void handle(long now)
+    {
+        // If now is less than previouse time, less than sleep in nano seconds.
+        if ((now - prevTime) < sleepNs) 
+        { 
+            // Return.
+            return;
+        }
+        
+        // Set previouse time equal to now.
+        prevTime = now;
+
+        // Call handle.
+        handle();
+    }
+
+    public abstract void handle();
+}
+```
+
 # Update Three
 Updated the game menu to show more options, updated the game architecture to allow more in-game flexibility, a lot of quality of life fixes and updates.
 
